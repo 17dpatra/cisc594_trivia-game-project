@@ -15,7 +15,7 @@ const categoryColors = {
     history: "#f6ad55",
     geography: "#686ad3",
     "pop culture": "#45cf4e",
-    sports: "#45cf4e"
+    sports: "#c6d221"
 };
 
 function QuestionsLayout() {
