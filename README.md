@@ -40,15 +40,15 @@ Example format:
 
 Setup Instructions:
 For Frontend:
-npm install
-npm start
-http://localhost:port
-http://127.0.0.1:8000
-For Backend:
+* cd /frontend
+* npm install
+* npm start
 
+
+For Backend:
 1. Install Dependencies
-   pip install python
-   pip install fastapi uvicorn
+   * pip install python
+   * pip install fastapi uvicorn
 2. Run the Server
    cd /backend
    python3 -m uvicorn app:app --reload --port 8000
