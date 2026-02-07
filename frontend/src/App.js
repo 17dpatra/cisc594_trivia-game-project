@@ -4,16 +4,18 @@ import { useState } from 'react';
 import LoginRegister from './pages/LoginRegister';
 import QuestionsLayout from './pages/QuestionsLayout';
 import ProtectedRoute from './components/ProtectedRoute';
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); //only allows other routes to be accessible after successful login
+  const { isAuthenticated } = useContext(AuthContext);
 
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<LoginRegister setIsAuthenticated={setIsAuthenticated}/>} />
+          <Route path="/" element={<LoginRegister />} />
 
           {/* User can only view other pages, if they login/register successfully */}
           <Route 
