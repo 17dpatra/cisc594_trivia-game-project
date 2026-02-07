@@ -1,0 +1,112 @@
+[
+  {
+    "category": "Science",
+    "question": "What is the chemical symbol for gold?",
+    "choices": [
+      "Gd",
+      "Ag",
+      "Au",
+      "Pt"
+    ],
+    "answer": "Au"
+  },
+  {
+    "category": "Science",
+    "question": "Which planet in our solar system has the highest average surface temperature?",
+    "choices": [
+      "Mercury",
+      "Venus",
+      "Earth",
+      "Mars"
+    ],
+    "answer": "Venus"
+  },
+  {
+    "category": "History",
+    "question": "In which year did the Berlin Wall fall?",
+    "choices": [
+      "1987",
+      "1988",
+      "1989",
+      "1991"
+    ],
+    "answer": "1989"
+  },
+  {
+    "category": "History",
+    "question": "Who was the first woman to win a Nobel Prize?",
+    "choices": [
+      "Marie Curie",
+      "Rosalind Franklin",
+      "Lise Meitner",
+      "Dorothy Hodgkin"
+    ],
+    "answer": "Marie Curie"
+  },
+  {
+    "category": "Geography",
+    "question": "Which country has the longest coastline in the world?",
+    "choices": [
+      "Australia",
+      "Russia",
+      "Canada",
+      "Indonesia"
+    ],
+    "answer": "Canada"
+  },
+  {
+    "category": "Geography",
+    "question": "What is the capital of Ethiopia?",
+    "choices": [
+      "Asmara",
+      "Addis Ababa",
+      "Nairobi",
+      "Kampala"
+    ],
+    "answer": "Addis Ababa"
+  },
+  {
+    "category": "Pop Culture",
+    "question": "Which film features the quote, \u2018May the Force be with you\u2019?",
+    "choices": [
+      "Star Trek",
+      "Star Wars",
+      "Blade Runner",
+      "The Matrix"
+    ],
+    "answer": "Star Wars"
+  },
+  {
+    "category": "Pop Culture",
+    "question": "Which artist released the album '1989'?",
+    "choices": [
+      "Katy Perry",
+      "Taylor Swift",
+      "Adele",
+      "Lady Gaga"
+    ],
+    "answer": "Taylor Swift"
+  },
+  {
+    "category": "Sports",
+    "question": "How many players are on the field for one soccer team during play?",
+    "choices": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "answer": "11"
+  },
+  {
+    "category": "Sports",
+    "question": "In tennis, what is the term for a score of zero?",
+    "choices": [
+      "Null",
+      "Zero",
+      "Love",
+      "Nil"
+    ],
+    "answer": "Love"
+  }
+]
