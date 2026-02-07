@@ -24,7 +24,7 @@ function QuestionsLayout() {
 
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [wager, setWager] = useState("");
-    const [question, setQuestion] = useState([]);
+    const [question, setQuestion] = useState(null);
     const [selectedChoice, setSelectedChoice] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -32,7 +32,7 @@ function QuestionsLayout() {
     const openCategory = (category) => {
         setSelectedCategory(category);
         setWager("");
-        setQuestion();
+        setQuestion(null);
         setShowModal(true);
     };
 
@@ -56,7 +56,7 @@ function QuestionsLayout() {
             const data = await response.json();
             console.log(data)
 
-            if (!response.ok || !data.valid) {
+            if (data.status != "ok") {
                 alert(data.message || "Invalid wager");
                 return;
             }
@@ -94,19 +94,98 @@ function QuestionsLayout() {
         }
     };
 
+    const closeModal = () => {
+        setShowModal(false);
+        setQuestion(null);
+        setSelectedChoice("");
+        setWager("");
+        setSelectedCategory(null);
+    };
+
     const validateAnswer = async () => {
         console.log("User selected choice", selectedChoice)
         console.log("Actual answer", question.answer)
+        
         if  (selectedChoice == question.answer) {
-            //TODO: update total wage
-            //TODO: call games_played
-            //TODO: call correct_answers
+            alert('Correct answer!')
+            //update total wage
+            try {
+                const response = await fetch(`/wages?username=${user}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ delta: "+" + wager })
+                });
+
+                const data = await response.json();
+                console.log(data)
+            } catch (err) {
+                console.error(err);
+                alert("Error adding wager");
+            }
+
+            //call correct_answers
+            try {
+                const response = await fetch(`/correctAnswers?username=${user}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ delta: "+" + wager })
+                });
+
+                const data = await response.json();
+                console.log(data)
+            } catch (err) {
+                console.error(err);
+                alert("Error adding correct answers");
+            }
         }
         else {
-            //TODO: update total wage
-            //TODO: call games_played
-            //TODO: call incorrect_answers
+            alert("Incorrect answer!")
+            //update total wage
+            try {
+                const response = await fetch(`/wages?username=${user}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ delta: "-" + wager })
+                });
+
+                const data = await response.json();
+                console.log(data)
+            } catch (err) {
+                console.error(err);
+                alert("Error removing wager");
+            }
+
+            //call incorrect_answers
+            try {
+                const response = await fetch(`/incorrectAnswers?username=${user}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ delta: "+" + wager })
+                });
+
+                const data = await response.json();
+                console.log(data)
+            } catch (err) {
+                console.error(err);
+                alert("Error adding incorrect answers");
+            }
         }
+
+        //call games_played
+        try {
+            const response = await fetch(`/gamesPlayed?username=${user}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            console.log(data)
+        } catch (err) {
+            console.error(err);
+            alert("Error incrementing games");
+        }
+
+        closeModal();
     }
 
     return (
@@ -163,7 +242,13 @@ function QuestionsLayout() {
                         {question.choices.map((choice, index) => (
                             <label
                             key={index}
-                            style={{ display: "block", marginBottom: "0.5rem" }}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.25rem",
+                                marginBottom: "0.5rem",
+                                cursor: "pointer",
+                            }}
                             >
                             <input
                                 type="radio"
@@ -171,8 +256,9 @@ function QuestionsLayout() {
                                 value={choice}
                                 checked={selectedChoice === choice}
                                 onChange={() => setSelectedChoice(choice)}
+                                style={{ margin: 0 }}
                             />
-                            {choice}
+                            <span>{choice}</span>
                             </label>
                         ))}
                         </form>
