@@ -1,11 +1,13 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../context/AuthContext";
 
 
-function LoginRegister({ setIsAuthenticated }) {    
+function LoginRegister() {    
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    const { setIsAuthenticated, setUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLoginOrRegister = async (e) => {
@@ -15,8 +17,8 @@ function LoginRegister({ setIsAuthenticated }) {
 
         const endpoint =
             action === "login"
-            ? "/api/v1/auth/login"
-            : "/api/v1/auth/register";
+            ? "/login"
+            : "/register";
         
         //validation: incomplete info
         if (!username|| !password) {
@@ -31,26 +33,24 @@ function LoginRegister({ setIsAuthenticated }) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({username, password }),
+                body: JSON.stringify({ username, password }),
             });
             const data = await response.json();
-            //console.log(data);
             
             if (!response.ok) {
                 alert(`${data.error}: ${data.message}` || `${action} failed`);
                 return;
             }
-            else {
-                localStorage.setItem("token", data.token);
-            }
 
             if (action === "login") {
                 alert("Login successful!");
                 setIsAuthenticated(true); //setting this makes all the other endpoints accessible within the app
+                setUser(username)
                 navigate("/app");
             } else {
                 alert("Registration successful!");
                 setIsAuthenticated(true); //setting this makes all the other endpoints accessible within the app
+                setUser(username)
                 navigate("/app");
             }
         }
