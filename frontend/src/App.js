@@ -1,21 +1,36 @@
-import './App.css';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import "./App.css";
+import { useState } from 'react';
+import LoginRegister from './pages/LoginRegister';
+import QuestionsLayout from './pages/QuestionsLayout';
+import ProtectedRoute from './components/ProtectedRoute';
+
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false); //only allows other routes to be accessible after successful login
+
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginRegister setIsAuthenticated={setIsAuthenticated}/>} />
+
+          {/* User can only view other pages, if they login/register successfully */}
+          <Route 
+            path="/app" 
+            element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <QuestionsLayout />
+                </ProtectedRoute>
+            }
+          >
+            {/* <Route path="userdashboard" element={<UserDashboard />} />
+            <Route path="teamdashboard" element={<TeamDashboard />} />
+            <Route path="calendar" element={<Calendar />} />
+            <Route path="admincontrols" element={<AdminControls />} /> */}
+          </Route>
+        </Routes>
+      </Router>
     </div>
   );
 }
