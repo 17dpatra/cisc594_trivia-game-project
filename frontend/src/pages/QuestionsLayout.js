@@ -20,7 +20,7 @@ const categoryColors = {
 
 function QuestionsLayout() {
     const { user } = useContext(AuthContext); //user's details
-    console.log('user details in questions layout', user)
+    //console.log('user details in questions layout', user)
 
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [wager, setWager] = useState("");
@@ -46,7 +46,7 @@ function QuestionsLayout() {
         if (!selectedCategory) return;
 
         try {
-            const response = await fetch(`/validate_wage/${numericWager}`, {
+            const response = await fetch(`/validate_wage/${user}/${numericWager}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -128,7 +128,7 @@ function QuestionsLayout() {
                             value={wager}
                             onChange={(e) => setWager(e.target.value)}
                         />
-                        <button onClick={validateWageAmount} disabled={loading}>
+                        <button onClick={fetchQuestions} disabled={loading}>
                             {loading ? "Loading..." : "Submit"}
                         </button>
                     </>
