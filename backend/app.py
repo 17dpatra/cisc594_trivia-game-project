@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 
 DB_NAME = "users.db"
-QUESTIONS_JSON_PATH = Path("./trivia_questions.json")  # uploaded file
+QUESTIONS_JSON_PATH = Path(__file__).resolve().parent / "trivia_questions.json"
 
 app = FastAPI()
 
@@ -21,6 +21,10 @@ class UserIn(BaseModel):
 
 class WagesDelta(BaseModel):
     delta: int  # can be + or -
+
+
+class AmountCheck(BaseModel):
+    amount: int
 
 
 # -----------------------
@@ -91,11 +95,11 @@ def load_questions_from_json() -> list[dict]:
     if not isinstance(data, list):
         raise HTTPException(status_code=500, detail="Questions JSON must be a list")
 
-    # light validation / normalization
     cleaned = []
-    for i, q in enumerate(data):
+    for q in data:
         if not isinstance(q, dict):
             continue
+
         category = (q.get("category") or "").strip()
         question = (q.get("question") or "").strip()
         choices = q.get("choices")
@@ -105,6 +109,7 @@ def load_questions_from_json() -> list[dict]:
             continue
         if not isinstance(choices, list):
             choices = []
+
         cleaned.append(
             {
                 "category": category,
@@ -113,10 +118,13 @@ def load_questions_from_json() -> list[dict]:
                 "answer": answer,
             }
         )
+
+    if not cleaned:
+        raise HTTPException(status_code=500, detail="No valid questions found in JSON")
+
     return cleaned
 
 
-# Load once at startup (fast + simple)
 QUESTIONS = load_questions_from_json()
 
 
@@ -283,8 +291,6 @@ def inc_incorrect_answers(username: str = Query(...)):
 
 # -----------------------
 # Trivia Endpoints
-# Frontend calls: GET /category?category=Science
-# You also get:   GET /questions?category=Science
 # -----------------------
 @app.get("/questions")
 def get_question(category: str = Query(...)):
@@ -293,5 +299,34 @@ def get_question(category: str = Query(...)):
 
 @app.get("/category")
 def get_question_by_category(category: str = Query(...)):
-    # keep compatibility with your existing frontend route
     return get_random_question(category)
+
+
+# -----------------------
+# Check Wage Endpoint
+# -----------------------
+@app.post("/checkWage")
+def check_wage(body: AmountCheck, username: str = Query(...)):
+    row = require_user(username)
+
+    wages = row["wages"]
+    amount = body.amount
+
+    # Your rule: if amount < wages -> error, else ok
+    # (If you actually meant "amount > wages -> error", flip this condition.)
+    if amount > wages:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "status": "error",
+                "message": "Amount is less than wages",
+                "wages": wages,
+                "requested": amount,
+            },
+        )
+
+    return {
+        "status": "ok",
+        "wages": wages,
+        "requested": amount,
+    }
