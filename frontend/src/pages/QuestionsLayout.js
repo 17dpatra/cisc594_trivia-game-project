@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import './styles/QuestionsLayout.css';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const categories = [
     "Science",
@@ -19,6 +20,7 @@ const categoryColors = {
 };
 
 function QuestionsLayout() {
+    const navigate = useNavigate();
     const { user } = useContext(AuthContext); //user's details
     //console.log('user details in questions layout', user)
 
@@ -188,8 +190,19 @@ function QuestionsLayout() {
         closeModal();
     }
 
+    const navigateToUserStatistics = async() => {
+        navigate("/app/userstatistics");
+    }
+
     return (
     <div>
+        <button
+            onClick={() => navigateToUserStatistics()}
+        >
+            View Your Statistics
+        </button>
+
+
         <h2>Choose a topic</h2>
         {/* Category Buttons */}
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
