@@ -107,7 +107,7 @@ Below is a successful flow of how a user can login/register and successfully pla
        * Incorrect answers: `/incorrectAnswers?username=<username>`
 
 # Areas for Improvements
-The web-app was created during class with limited time. Hence, below are a few areas and acknowledgments for improvement:
+This web-app was created during class with limited time. Given the time constraints, below are a few areas and acknowledgments for improvement:
 * Use multiple tables to store user's data - Users table for login/registration and UserStatistics table to keep track of user's stats
 * Incorporate SQLAlchemy in the backend to make SQL queries more user-friendly
 * Securely store passwords by hashing them with the bcrypt Python library
